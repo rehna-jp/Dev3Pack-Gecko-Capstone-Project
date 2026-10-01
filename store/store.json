@@ -1,9 +1,22 @@
 {
-  "store": "dev3octocat",
-  "telegram_channel": "",
+  "store": "dev3rehna",
+  "telegram_channel": "@geckocoffeeshop",
   "products": [
-    {"name": "Espresso", "price_raw": 1000000, "mint": "own"},
-    {"name": "Cookie", "price_raw": 2500000, "mint": "own"},
-    {"name": "Beans", "price_raw": 4000000, "mint": "own"}
-  ]
+    {
+      "name": "Espresso",
+      "price_raw": 1000000,
+      "mint": "own"
+    },
+    {
+      "name": "Cookie",
+      "price_raw": 2500000,
+      "mint": "own"
+    },
+    {
+      "name": "Beans",
+      "price_raw": 4000000,
+      "mint": "own"
+    }
+  ],
+  "address": "Af7shNPTxeMqTgXrzx2kgXTNNyt7aJHcB5Pxbkv1Bi9z"
 }
