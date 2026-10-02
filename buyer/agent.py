@@ -76,7 +76,9 @@ def pin_intent(run: Run) -> None:
     Leave `run.intent` (from `parse_intent`) and `run.intent_path` (from `pin`, written to
     `run.out / "intents"`). The runner checks the file is there and says the same thing.
     """
-    raise NotYetWritten("pin_intent", "buyer/agent.py: parse_intent, then pin it to disk")
+    assert run.menu is not None
+    run.intent = parse_intent(run.ask, run.menu, run.context)
+    run.intent_path = pin(run.intent, run.out / "intents")
 
 
 def prepare(run: Run) -> None:
@@ -87,7 +89,17 @@ def prepare(run: Run) -> None:
     `Prepared.from_answer(run.answer)` on `run.prepared`. If Gecko refuses, `from_answer`
     raises `GeckoRefused`: let it rise, the runner records it.
     """
-    raise NotYetWritten("prepare", "buyer/agent.py: call prepare_purchase with the pinned fields")
+    assert run.intent is not None
+    run.answer = run.gecko.call(
+        "prepare_purchase",
+        {
+            "store": run.intent.store,
+            "product": run.intent.product,
+            "buyer": run.intent.buyer,
+            "network": run.intent.network,
+        },
+    )
+    run.prepared = Prepared.from_answer(run.answer)
 
 
 def check(run: Run) -> None:
@@ -95,7 +107,8 @@ def check(run: Run) -> None:
 
     Leave the `Verdict` from `check_all` on `run.verdict`. Do not sign here.
     """
-    raise NotYetWritten("check", "buyer/agent.py: run check_all on the pin and the prepared bytes")
+    assert run.intent is not None and run.prepared is not None
+    run.verdict = check_all(run.intent, run.prepared)
 
 
 def sign(run: Run) -> None:

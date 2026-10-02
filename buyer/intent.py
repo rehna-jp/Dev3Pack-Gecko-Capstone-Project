@@ -106,7 +106,49 @@ def parse_intent(ask: str, menu: Menu, context: Context) -> IntentRecord:
 
     Fill every field of `IntentRecord` except `pinned_at`, which stamps itself.
     """
-    raise NotYetWritten("parse_intent", "buyer/intent.py: turn the ask into an IntentRecord")
+      # 1. Quantity
+    WORD_TO_NUM = {"one": 1, "two": 2, "three": 3, "four": 4, "five": 5}
+    quantity = 1
+    for word, num in WORD_TO_NUM.items():
+        if re.search(rf"\b{word}\b", ask.lower()):
+            quantity = num
+            break
+    else:
+        match = re.search(r"\b(\d+)\b", ask)
+        if match:
+            quantity = int(match.group(1))
+    # 2. Budget
+    budget_raw = context.budget_raw
+    cap_match = re.search(r"up to (\d+(?:\.\d+)?)\s*USDC", ask, re.IGNORECASE)
+    if cap_match:
+        budget_raw = int(float(cap_match.group(1)) * 1_000_000)
+    # 3. Product & menu price
+    matched_product = None
+    menu_price_raw = None
+    for item in menu.products:
+        first_word = item.name.split()[0].lower()
+        if item.name.lower() in ask.lower() or re.search(rf"\b{first_word}\b", ask.lower()):
+            matched_product = item.name
+            menu_price_raw = item.price_raw
+            break
+    if not matched_product:
+        cleaned = re.sub(r"^(one|two|a|an|\d+)\s+", "", ask, flags=re.IGNORECASE).strip()
+        matched_product = cleaned.capitalize()
+        menu_price_raw = None
+    # 4. Return IntentRecord
+    return IntentRecord(
+        ask=ask,
+        store=context.store,
+        product=matched_product,
+        quantity=quantity,
+        budget_raw=budget_raw,
+        mint=context.pay_mint,
+        buyer=context.buyer,
+        network=context.network,
+        store_authority=menu.authority,
+        menu_price_raw=menu_price_raw,
+    )
+
 
 
 def slug(text: str) -> str:
