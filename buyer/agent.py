@@ -117,7 +117,8 @@ def sign(run: Run) -> None:
     `run.signer.sign(run.prepared)` returns the signed base64. Leave it on `run.signed`.
     The signer refuses by itself if the cluster, the budget or the blockhash is wrong.
     """
-    raise NotYetWritten("sign", "buyer/agent.py: sign the prepared bytes with run.signer")
+    assert run.prepared is not None
+    run.signed = run.signer.sign(run.prepared)
 
 
 def verify(run: Run) -> None:
@@ -127,7 +128,17 @@ def verify(run: Run) -> None:
     `binding_strength` from the prepared answer, `last_valid_block_height`, and
     `rpc_url = run.chain.rpc_url`. Leave the answer on `run.verified`.
     """
-    raise NotYetWritten("verify", "buyer/agent.py: call verify_signed_transaction")
+    assert run.signed is not None and run.prepared is not None
+    run.verified = run.gecko.call(
+        "verify_signed_transaction",
+        {
+            "transaction": run.signed,
+            "binding": run.prepared.binding,
+            "binding_strength": run.prepared.binding_strength,
+            "last_valid_block_height": run.prepared.last_valid_block_height,
+            "rpc_url": run.chain.rpc_url,
+        },
+    )
 
 
 def submit(run: Run) -> None:
@@ -138,7 +149,16 @@ def submit(run: Run) -> None:
     `run.submitted`. Never call it twice for the same bytes: if it did not confirm, read
     what it said first.
     """
-    raise NotYetWritten("submit", "buyer/agent.py: call submit_transaction")
+    assert run.signed is not None and run.prepared is not None
+    run.submitted = run.gecko.call(
+        "submit_transaction",
+        {
+            "transaction": run.signed,
+            "binding": run.prepared.binding,
+            "last_valid_block_height": run.prepared.last_valid_block_height,
+            "rpc_url": run.chain.rpc_url,
+        },
+    )
 
 
 def write_the_receipt(run: Run) -> None:
@@ -147,8 +167,21 @@ def write_the_receipt(run: Run) -> None:
     `read_snapshot(...)` for the after-read, then `reconcile(...)` with `run.before`, and
     leave the `Receipt` on `run.receipt`. The runner writes it to `receipts/`.
     """
-    raise NotYetWritten("write_the_receipt", "buyer/agent.py: read the ledger and reconcile")
-
+    assert (
+        run.intent is not None
+        and run.prepared is not None
+        and run.before is not None
+        and run.submitted is not None
+    )
+    after = read_snapshot(run.chain, run.intent, run.prepared)
+    run.receipt = reconcile(
+        run.intent,
+        run.prepared,
+        run.before,
+        after,
+        run.submitted,
+        run.source,
+    )
 
 # ==========================================================================================
 # The runner. Not yours to change: it is what makes the order a fact.
