@@ -1,0 +1,13 @@
+{
+  "ask": "tip up to 2 USDC",
+  "store": "dev3pack-cafe",
+  "product": "Tip",
+  "quantity": 2,
+  "budget_raw": 2000000,
+  "mint": "Eoqdd43nFQ9HzGq8HjBRVLCV6aTqCFRiwHy1ZVQheYSi",
+  "buyer": "7osLGtZbKok51ZD5bPMLcYEjxcdQVDe5f3iMG1vwak7W",
+  "network": "devnet",
+  "store_authority": "Dt8quRFWgTMrrDgVa4GGFRJWksncskbs1tpYAQHkEPwJ",
+  "menu_price_raw": 3000000,
+  "pinned_at": "2026-10-02T03:37:55.844652+00:00"
+}

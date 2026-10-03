@@ -10,13 +10,13 @@ moved) or a **refusal** (it did not sign, and this is the field that disagreed).
 
 | Min | On screen | Backed by | What I say |
 |---|---|---|---|
-| 0:00 | your README's first lines: the sentence and the explorer link | `README.md` | |
-| 0:45 | your assistant with Gecko connected: `list_stores` shows *your* store | `docs/connect.md`, `store/store.json` | |
-| 1:30 | the live buy: pin, prepare, 7 ticks, sign, verify, submit | `uv run buyer "one espresso" --devnet` | |
-| 2:30 | the landing: the explorer, then the receipt with ledger deltas | `receipts/<sig8>.md` | |
-| 3:15 | **the injected failure**: the judge draws a card; your buyer refuses and signs nothing | `buyer/check.py`, `refusals/` | |
-| 4:30 | tests and the five-case table; one test that was red first | `uv run pytest`, `docs/EVAL_REPORT.md` | |
-| 5:15 | the ADR: the decision, and what would reverse it | `docs/adr/0001-refusals-before-signing.md` | |
+| 0:00 | your README's first lines: the sentence and the explorer link | `README.md` | "This is my on-chain store dev3rehna on Solana devnet and my buyer agent that verifies transactions before signing." |
+| 0:45 | your assistant with Gecko connected: `list_stores` shows *your* store | `docs/connect.md`, `store/store.json` | "Here is Gecko querying list_stores; dev3rehna appears with its products, prices, and authority on-chain." |
+| 1:30 | the live buy: pin, prepare, 7 ticks, sign, verify, submit | `uv run buyer "one espresso" --devnet` | "Running buyer for one espresso: it pins the intent, prepares unsigned bytes, verifies all 7 fields, signs locally, verifies with Gecko, and submits." |
+| 2:30 | the landing: the explorer, then the receipt with ledger deltas | `receipts/2NebdGaZ.md` | "The transaction confirmed. The receipt reconciles 2 ledger reads: buyer -1M, store +1M, total_purchases 0 to 1." |
+| 3:15 | **the injected failure**: the judge draws a card; your buyer refuses and signs nothing | `buyer/check.py`, `refusals/` | "The card tests an adversarial case: the check catches the discrepancy, refuses naming both values, and signs nothing." |
+| 4:30 | tests and the five-case table; one test that was red first | `uv run pytest`, `docs/EVAL_REPORT.md` | "All 24 unit tests pass, covering parsing and checks. Test destination was red first until we derived the ATA from the pinned authority and mint." |
+| 5:15 | the ADR: the decision, and what would reverse it | `docs/adr/0001-refusals-before-signing.md` | "Our ADR establishes refusing before signing: we never sign bytes that differ from the pinned intent, stopping attacks before state changes." |
 
 The **finalists** (the students presenting on Friday, named by the instructor) may do
 minute 1:30 on mainnet against geckocoffee instead, with a registered, funded wallet (see

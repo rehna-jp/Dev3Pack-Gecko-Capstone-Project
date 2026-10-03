@@ -1,0 +1,13 @@
+{
+  "ask": "one general-admission ticket",
+  "step": "prepare",
+  "field": "gecko:product-unknown",
+  "asked": null,
+  "found": null,
+  "where": "gecko",
+  "note": "'dev3pack-cafe' does not sell 'General-admission ticket' \u2014 it lists Espresso, VIP ticket, Module 3, Tip, Beans, Latte (ignore your budget). The price and the mint are per-product facts written in the store's own account, so an unlisted product has neither. THE MENU IS THE GROUND TRUTH AND THE CHOICE",
+  "signed": false,
+  "intent": "intents/20261002T033746.916420-one-general-admission-ticket.json",
+  "source": "devnet",
+  "at": "2026-10-02T03:37:48.019411+00:00"
+}
